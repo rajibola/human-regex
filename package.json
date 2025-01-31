@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "prepublish": "npm test",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc -c jsdoc.json && npm run docs:examples",
+    "docs:examples": "cp -r examples docs/examples"
   },
   "keywords": [
     "regex",
