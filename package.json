@@ -1,0 +1,25 @@
+{
+  "name": "human-regex",
+  "version": "1.0.1",
+  "description": "Human-friendly regex builder with English-like syntax",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "prepublish": "npm test",
+    "docs": "jsdoc -c jsdoc.json"
+  },
+  "keywords": [
+    "regex",
+    "human-readable",
+    "builder",
+    "pattern"
+  ],
+  "author": "Ridwan Ajibola <rajibola1997@gmail.com>",
+  "license": "MIT",
+  "types": "index.d.ts",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "typescript": "^5.7.3"
+  }
+}
