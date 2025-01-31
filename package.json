@@ -4,7 +4,7 @@
   "description": "Human-friendly regex builder with English-like syntax",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "prepublish": "npm test",
     "docs": "jsdoc -c jsdoc.json && npm run docs:examples",
     "docs:examples": "cp -r examples docs/examples"
