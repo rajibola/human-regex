@@ -50,3 +50,40 @@ test("protocol validation works", () => {
   expect(regex.test("https://")).toBe(true);
   expect(regex.test("ftp://")).toBe(false);
 });
+
+test("range method works correctly", () => {
+  const regex = createRegex().range("digit").toRegExp();
+  expect(regex.test("5")).toBe(true);
+  expect(regex.test("a")).toBe(false);
+
+  const letterRegex = createRegex().range("letter").toRegExp();
+  expect(letterRegex.test("a")).toBe(true);
+  expect(letterRegex.test("Z")).toBe(true);
+  expect(letterRegex.test("5")).toBe(false);
+});
+
+test("or method works correctly", () => {
+  const regex = createRegex().literal("cat").or().literal("dog").toRegExp();
+  expect(regex.test("cat")).toBe(true);
+  expect(regex.test("dog")).toBe(true);
+  expect(regex.test("bat")).toBe(false);
+});
+
+test("exactly method works correctly", () => {
+  const regex = createRegex()
+    .startAnchor()
+    .digit()
+    .exactly(3)
+    .endAnchor()
+    .toRegExp();
+  expect(regex.test("123")).toBe(true);
+  expect(regex.test("12")).toBe(false);
+  expect(regex.test("1234")).toBe(false);
+});
+
+test("whitespace method works correctly", () => {
+  const regex = createRegex().whitespace().toRegExp();
+  expect(regex.test(" ")).toBe(true);
+  expect(regex.test("\t")).toBe(true);
+  expect(regex.test("a")).toBe(false);
+});
