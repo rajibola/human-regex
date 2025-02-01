@@ -7,7 +7,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["./node_modules/@types"],
-    "importHelpers": true
+    "importHelpers": true,
+    "declaration": true,
+    "declarationDir": "dist/types"
   },
   "include": ["src/**/*"]
 }

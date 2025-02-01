@@ -4,6 +4,7 @@
   "description": "Human-friendly regex builder with English-like syntax",
   "main": "dist/human-regex.cjs.js",
   "module": "dist/human-regex.esm.js",
+  "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
     "test": "jest --coverage",
@@ -22,6 +23,7 @@
   "license": "MIT",
   "files": [
     "dist",
+    "types",
     "index.js",
     "index.d.ts",
     "README.md",
