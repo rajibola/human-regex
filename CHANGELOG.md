@@ -77,3 +77,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Declaration file for module
+
+## [2.0.3] - 2025-02-01
+
+### Changed
+
+- Rollup config and tsconfig
+
+### Fixed
+
+- Declaration file for module

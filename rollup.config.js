@@ -17,14 +17,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [
-    resolve(),
-    commonjs(),
-    typescript({
-      tsconfig: "./tsconfig.json",
-      declaration: true,
-      declarationDir: "dist/types",
-    }),
-    terser(),
-  ],
+  plugins: [resolve(), commonjs(), typescript(), terser()],
 };
