@@ -1,1 +1,8 @@
-module.exports = require("./src/human-regex");
+import createRegex, {
+  Patterns,
+  Flags,
+  Ranges,
+  Quantifiers,
+} from "./src/human-regex";
+
+export { createRegex, Patterns, Flags, Ranges, Quantifiers };

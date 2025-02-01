@@ -227,5 +227,5 @@ const Patterns = (() => {
 })();
 
 // Public API
-Object.assign(createRegex, { Patterns, Flags, Ranges, Quantifiers });
-module.exports = createRegex;
+export { createRegex, Patterns, Flags, Ranges, Quantifiers };
+export default createRegex;

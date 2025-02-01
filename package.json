@@ -22,7 +22,7 @@
   "types": "index.d.ts",
   "files": [
     "dist",
-    "src/human-regex.js",
+    "index.js",
     "index.d.ts",
     "README.md",
     "LICENSE"
