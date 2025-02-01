@@ -20,7 +20,6 @@
   ],
   "author": "Ridwan Ajibola <rajibola1997@gmail.com>",
   "license": "MIT",
-  "types": "index.d.ts",
   "files": [
     "dist",
     "index.js",

@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["./node_modules/@types", "./index.d.ts"]
+    "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src/**/*", "index.d.ts"]
+  "include": ["src/**/*"]
 }
