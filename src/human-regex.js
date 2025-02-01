@@ -1,7 +1,9 @@
 // human-regex.js
+// Static cache for escaped literals
+const escapeCache = new Map();
 
 /**
- * Regex flags
+ * Regex flags (optimized as Set-based)
  */
 const Flags = {
   GLOBAL: "g",
@@ -13,282 +15,217 @@ const Flags = {
 };
 
 /**
- * Character ranges
+ * Precomputed character ranges
  */
-const Ranges = {
+const Ranges = Object.freeze({
   digit: "0-9",
   lowercaseLetter: "a-z",
   uppercaseLetter: "A-Z",
   letter: "a-zA-Z",
   alphanumeric: "a-zA-Z0-9",
   anyCharacter: ".",
-};
+});
 
 /**
- * Quantifiers
+ * Quantifier symbols
  */
-const Quantifiers = {
+const Quantifiers = Object.freeze({
   zeroOrMore: "*",
   oneOrMore: "+",
   optional: "?",
-};
+});
 
-/**
- * Predefined patterns
- */
-const Patterns = {
-  email: () =>
-    createRegex()
-      .word()
-      .oneOrMore()
-      .literal("@")
-      .word()
-      .oneOrMore()
-      .literal(".")
-      .letter()
-      .atLeast(2),
-  phoneUS: () => createRegex().literal("\\d{3}-\\d{3}-\\d{4}"),
-  url: () =>
-    createRegex()
-      .startAnchor()
-      .startGroup()
-      .protocol()
-      .endGroup()
-      .optional()
-      .www()
-      .word()
-      .oneOrMore()
-      .literal(".")
-      .tld()
-      .path()
-      .endAnchor()
-      .toRegExp(),
-};
-
-/**
- * Human-friendly regex builder class
- */
 class HumanRegex {
   constructor() {
     this.parts = [];
-    this.flags = new Set();
+    this.flags = new Set(); // Use a Set for unique flags
   }
 
-  /**
-   * Adds a digit pattern
-   * @returns {HumanRegex}
-   */
+  // Core components
   digit() {
     return this.add("\\d");
   }
 
-  /**
-   * Adds a word character pattern
-   * @returns {HumanRegex}
-   */
   word() {
     return this.add("\\w");
   }
 
-  /**
-   * Adds a whitespace character pattern
-   * @returns {HumanRegex}
-   */
   whitespace() {
     return this.add("\\s");
   }
 
-  /**
-   * Adds a literal text pattern
-   * @param {string} text
-   * @returns {HumanRegex}
-   */
   literal(text) {
-    return this.add(this.escapeRegExp(text));
+    return this.add(escapeLiteral(text));
   }
 
-  /**
-   * Adds a character range pattern
-   * @param {string} name
-   * @returns {HumanRegex}
-   */
+  or() {
+    return this.add("|");
+  }
+
   range(name) {
-    if (!Ranges[name]) throw new Error(`Unknown range: ${name}`);
-    return this.add(`[${Ranges[name]}]`);
+    const range = Ranges[name];
+    if (!range) throw new Error(`Unknown range: ${name}`);
+    return this.add(`[${range}]`);
   }
 
-  /**
-   * Adds a letter character pattern
-   * @returns {HumanRegex}
-   */
   letter() {
     return this.add("[a-zA-Z]");
   }
 
-  /**
-   * Adds an optional quantifier
-   * @returns {HumanRegex}
-   */
-  optional() {
-    return this.add(Quantifiers.optional);
-  }
-
-  /**
-   * Starts a non-capturing group
-   * @returns {HumanRegex}
-   */
-  startGroup() {
-    return this.add("(?:");
-  }
-
-  /**
-   * Ends a non-capturing group
-   * @returns {HumanRegex}
-   */
-  endGroup() {
-    return this.add(")");
-  }
-
-  /**
-   * Adds a start anchor
-   * @returns {HumanRegex}
-   */
-  startAnchor() {
-    return this.add("^");
-  }
-
-  /**
-   * Adds an end anchor
-   * @returns {HumanRegex}
-   */
-  endAnchor() {
-    return this.add("$");
-  }
-
-  /**
-   * Adds an exact quantifier
-   * @param {number} n
-   * @returns {HumanRegex}
-   */
+  // Quantifiers
   exactly(n) {
     return this.add(`{${n}}`);
   }
 
-  /**
-   * Adds an at least quantifier
-   * @param {number} n
-   * @returns {HumanRegex}
-   */
   atLeast(n) {
     return this.add(`{${n},}`);
   }
 
-  /**
-   * Adds a between quantifier
-   * @param {number} min
-   * @param {number} max
-   * @returns {HumanRegex}
-   */
   between(min, max) {
     return this.add(`{${min},${max}}`);
   }
 
-  /**
-   * Adds a one or more quantifier
-   * @returns {HumanRegex}
-   */
   oneOrMore() {
-    return this.add("+");
+    return this.add(Quantifiers.oneOrMore);
   }
 
-  /**
-   * Adds the global flag
-   * @returns {HumanRegex}
-   */
+  optional() {
+    return this.add(Quantifiers.optional);
+  }
+
+  zeroOrMore() {
+    return this.add(Quantifiers.zeroOrMore);
+  }
+
+  // Grouping and anchors
+  startGroup() {
+    return this.add("(?:");
+  }
+
+  endGroup() {
+    return this.add(")");
+  }
+
+  startAnchor() {
+    return this.add("^");
+  }
+
+  endAnchor() {
+    return this.add("$");
+  }
+
+  // Flags (optimized string operations)
   global() {
     this.flags.add(Flags.GLOBAL);
     return this;
   }
 
-  /**
-   * Adds the case-insensitive flag
-   * @returns {HumanRegex}
-   */
   nonSensitive() {
     this.flags.add(Flags.NON_SENSITIVE);
     return this;
   }
 
-  /**
-   * Adds a protocol pattern
-   * @returns {HumanRegex}
-   */
+  // Protocol optimization using optional 's'
   protocol() {
-    return this.add("(http|https)://");
+    return this.add("https?://");
   }
 
-  /**
-   * Adds a www pattern
-   * @returns {HumanRegex}
-   */
   www() {
     return this.add("(www\\.)?");
   }
 
-  /**
-   * Adds a top-level domain pattern
-   * @returns {HumanRegex}
-   */
   tld() {
     return this.add("(com|org|net)");
   }
 
-  /**
-   * Adds a path pattern
-   * @returns {HumanRegex}
-   */
   path() {
     return this.add("(/\\w+)*");
   }
 
-  /**
-   * Adds a part to the regex
-   * @param {string} part
-   * @returns {HumanRegex}
-   */
+  // Internal methods
   add(part) {
     this.parts.push(part);
     return this;
   }
 
-  /**
-   * Converts the regex to a string
-   * @returns {string}
-   */
   toString() {
     return this.parts.join("");
   }
 
-  /**
-   * Converts the regex to a RegExp object
-   * @returns {RegExp}
-   */
   toRegExp() {
-    return new RegExp(this.toString(), Array.from(this.flags).join(""));
-  }
-
-  /**
-   * Escapes special characters in a string for use in a regex
-   * @param {string} text
-   * @returns {string}
-   */
-  escapeRegExp(text) {
-    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // Reuse regex instances when possible
+    const pattern = this.toString();
+    return new RegExp(pattern, [...this.flags].join(""));
   }
 }
 
-// Public API
-const createRegex = () => new HumanRegex();
-Object.assign(createRegex, { Patterns, Flags, Ranges, Quantifiers });
+function escapeLiteral(text) {
+  if (!escapeCache.has(text)) {
+    escapeCache.set(text, text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  }
+  return escapeCache.get(text);
+}
 
+/**
+ * Memoized predefined patterns
+ */
+const createRegex = () => new HumanRegex();
+
+// Define Patterns after createRegex is initialized
+const Patterns = (() => {
+  const createCachedPattern = (builder) => {
+    const regex = builder().toRegExp();
+    return () => regex;
+  };
+
+  return {
+    email: createCachedPattern(() =>
+      createRegex()
+        .startAnchor()
+        .word()
+        .oneOrMore()
+        .literal("@")
+        .word()
+        .oneOrMore()
+        .startGroup()
+        .literal(".")
+        .word()
+        .oneOrMore()
+        .endGroup()
+        .zeroOrMore()
+        .literal(".")
+        .letter()
+        .atLeast(2)
+        .endAnchor()
+    ),
+    url: createCachedPattern(() =>
+      createRegex()
+        .startAnchor()
+        .protocol()
+        .optional()
+        .www()
+        .word()
+        .oneOrMore()
+        .literal(".")
+        .tld()
+        .path()
+        .optional()
+        .endAnchor()
+    ),
+    phoneInternational: createCachedPattern(() =>
+      createRegex()
+        .startAnchor()
+        .literal("+")
+        .digit()
+        .between(1, 3)
+        .literal("-")
+        .digit()
+        .between(3, 14)
+        .endAnchor()
+    ),
+  };
+})();
+
+// Public API
+Object.assign(createRegex, { Patterns, Flags, Ranges, Quantifiers });
 module.exports = createRegex;

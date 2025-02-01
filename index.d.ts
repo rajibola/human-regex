@@ -22,7 +22,6 @@ declare module "human-regex" {
 
   export const Patterns: {
     email: () => HumanRegex;
-    phoneUS: () => HumanRegex;
     phoneInternational: () => HumanRegex;
     url: () => HumanRegex;
   };
