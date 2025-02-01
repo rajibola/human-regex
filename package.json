@@ -4,6 +4,7 @@
   "description": "Human-friendly regex builder with English-like syntax",
   "main": "dist/human-regex.cjs.js",
   "module": "dist/human-regex.esm.js",
+  "type": "module",
   "scripts": {
     "test": "jest --coverage",
     "prepublish": "npm test && npm run build",
