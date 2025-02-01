@@ -228,4 +228,3 @@ const Patterns = (() => {
 
 // Public API
 export { createRegex, Patterns, Flags, Ranges, Quantifiers };
-export default createRegex;

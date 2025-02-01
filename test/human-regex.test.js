@@ -1,14 +1,14 @@
-const createRegex = require("../src/human-regex");
+import { createRegex, Patterns } from "../src/human-regex";
 
 test("email pattern matches valid addresses", () => {
-  const regex = createRegex.Patterns.email();
+  const regex = Patterns.email();
   expect(regex.test("test@example.com")).toBe(true);
   expect(regex.test("name@domain.co.uk")).toBe(true);
   expect(regex.test("invalid@com")).toBe(false);
 });
 
 test("phoneInternational pattern matches valid phone numbers", () => {
-  const { phoneInternational } = createRegex.Patterns;
+  const { phoneInternational } = Patterns;
 
   // Valid cases
   expect(phoneInternational().test("+1-123456789")).toBe(true);
@@ -24,7 +24,7 @@ test("phoneInternational pattern matches valid phone numbers", () => {
 });
 
 test("URL pattern matches valid URLs", () => {
-  const regex = createRegex.Patterns.url();
+  const regex = Patterns.url();
   expect(regex.test("http://www.example.com")).toBe(true);
   expect(regex.test("https://example.org/path")).toBe(true);
   expect(regex.test("ftp://example.net")).toBe(false);
