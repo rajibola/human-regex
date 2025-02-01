@@ -15,7 +15,7 @@ npm install human-regex
 ## Usage
 
 ```javascript
-const { createRegex } = require("human-regex");
+import { createRegex } from "human-regex";
 
 // Simple password validation
 const passwordRegex = createRegex()

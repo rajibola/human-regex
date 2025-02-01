@@ -57,3 +57,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Changed to TS
+
+## [2.0.1] - 2025-02-01
+
+### Changed
+
+- Change index and test file to ts
+
+### Fixed
+
+- `tslib` build issue
