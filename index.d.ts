@@ -2,12 +2,21 @@ declare module "human-regex" {
   interface HumanRegex {
     digit(): HumanRegex;
     word(): HumanRegex;
-    literal(text: string): HumanRegex;
     whitespace(): HumanRegex;
+    literal(text: string): HumanRegex;
+    or(): HumanRegex;
     range(name: string): HumanRegex;
+    letter(): HumanRegex;
     exactly(n: number): HumanRegex;
     atLeast(n: number): HumanRegex;
     between(min: number, max: number): HumanRegex;
+    oneOrMore(): HumanRegex;
+    optional(): HumanRegex;
+    zeroOrMore(): HumanRegex;
+    startGroup(): HumanRegex;
+    endGroup(): HumanRegex;
+    startAnchor(): HumanRegex;
+    endAnchor(): HumanRegex;
     global(): HumanRegex;
     nonSensitive(): HumanRegex;
     protocol(): HumanRegex;
