@@ -19,11 +19,11 @@ const { createRegex } = require("human-regex");
 
 // Simple password validation
 const passwordRegex = createRegex()
-  .literal("(?=.*\\d)") // Must contain digit
-  .literal("(?=.*[!@#$%^&*])") // Must contain special char
-  .range("alphanumeric")
-  .atLeast(8)
-  .toRegExp();
+  .digit() // Must contain digit
+  .special() // Must contain special char
+  .range("alphanumeric") // Must contain alphanumeric char
+  .atLeast(8) // Must be at least 8 characters long
+  .toRegExp(); // Convert to RegExp object
 ```
 
 ## API Reference
