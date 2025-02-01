@@ -2,10 +2,12 @@
   "name": "human-regex",
   "version": "1.0.1",
   "description": "Human-friendly regex builder with English-like syntax",
-  "main": "index.js",
+  "main": "dist/human-regex.cjs.js",
+  "module": "dist/human-regex.esm.js",
   "scripts": {
     "test": "jest --coverage",
-    "prepublish": "npm test",
+    "prepublish": "npm test && npm run build",
+    "build": "rollup -c",
     "docs": "jsdoc -c jsdoc.json && npm run docs:examples",
     "docs:examples": "cp -r examples docs/examples"
   },
@@ -18,9 +20,20 @@
   "author": "Ridwan Ajibola <rajibola1997@gmail.com>",
   "license": "MIT",
   "types": "index.d.ts",
+  "files": [
+    "dist",
+    "src/human-regex.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/jest": "^29.5.14",
     "jest": "^29.7.0",
+    "rollup": "^4.34.0",
     "typescript": "^5.7.3"
   }
 }
