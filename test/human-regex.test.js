@@ -10,13 +10,11 @@ test("email pattern matches valid addresses", () => {
 test("phoneInternational pattern matches valid phone numbers", () => {
   const { phoneInternational } = Patterns;
 
-  // Valid cases
   expect(phoneInternational().test("+1-123456789")).toBe(true);
   expect(phoneInternational().test("+12-123456789")).toBe(true);
   expect(phoneInternational().test("+123-123456789")).toBe(true);
   expect(phoneInternational().test("+123-12345678901234")).toBe(true);
 
-  // Invalid cases
   expect(phoneInternational().test("1-123456789")).toBe(false);
   expect(phoneInternational().test("+1234-123456789")).toBe(false);
   expect(phoneInternational().test("+123-12")).toBe(false);

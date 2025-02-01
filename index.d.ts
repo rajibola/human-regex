@@ -1,6 +1,7 @@
 declare module "human-regex" {
   interface HumanRegex {
     digit(): HumanRegex;
+    special(): HumanRegex;
     word(): HumanRegex;
     whitespace(): HumanRegex;
     literal(text: string): HumanRegex;
@@ -9,6 +10,7 @@ declare module "human-regex" {
     letter(): HumanRegex;
     exactly(n: number): HumanRegex;
     atLeast(n: number): HumanRegex;
+    atMost(n: number): HumanRegex;
     between(min: number, max: number): HumanRegex;
     oneOrMore(): HumanRegex;
     optional(): HumanRegex;
@@ -30,9 +32,9 @@ declare module "human-regex" {
   export function createRegex(): HumanRegex;
 
   export const Patterns: {
-    email: () => HumanRegex;
-    phoneInternational: () => HumanRegex;
-    url: () => HumanRegex;
+    email: () => RegExp;
+    phoneInternational: () => RegExp;
+    url: () => RegExp;
   };
 
   export const Flags: {
