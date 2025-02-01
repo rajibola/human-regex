@@ -67,3 +67,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `tslib` build issue
+
+## [2.0.2] - 2025-02-01
+
+### Changed
+
+- Rollup config and tsconfig
+
+### Fixed
+
+- Declaration file for module
