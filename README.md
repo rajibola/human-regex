@@ -1,14 +1,22 @@
-# Human Regex 🤖➡️👤
-
-Human-friendly regular expression builder with English-like syntax.
-
 [![npm version](https://img.shields.io/npm/v/human-regex.svg)](https://www.npmjs.com/package/human-regex)
 [![Build Status](https://github.com/rajibola/human-regex/actions/workflows/test.yml/badge.svg)](https://github.com/rajibola/human-regex/actions)
 [![Coverage Status](https://coveralls.io/repos/github/rajibola/human-regex/badge.svg)](https://coveralls.io/github/rajibola/human-regex)
 
+# Human Regex 🤖➡️👤
+
+Human-friendly regular expression builder with English-like syntax.
+
+## Features
+
+- 🧩 Intuitive builder pattern with chainable methods
+- 🎯 Prebuilt validators for common patterns (emails, URLs, phone numbers)
+- 📚 Comprehensive character classes and quantifiers
+- 🛡️ Type-safe implementation with TypeScript
+- ⚡ Memoized patterns for better performance
+- 🔍 Supports all standard regex flags
+
 ## Table of Contents
 
-- [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Basic Example](#basic-example)
@@ -24,15 +32,6 @@ Human-friendly regular expression builder with English-like syntax.
 - [Examples](#examples)
 - [Contributing](#contributing)
 - [License](#license)
-
-## Features
-
-- 🧩 Intuitive builder pattern with chainable methods
-- 🎯 Prebuilt validators for common patterns (emails, URLs, phone numbers)
-- 📚 Comprehensive character classes and quantifiers
-- 🛡️ Type-safe implementation with TypeScript
-- ⚡ Memoized patterns for better performance
-- 🔍 Supports all standard regex flags
 
 ## Installation
 
