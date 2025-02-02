@@ -227,4 +227,5 @@ test("regex works for password validation", () => {
   expect(regex.test("a1234567")).toBe(false);
   expect(regex.test("a1234567!a")).toBe(true);
   expect(regex.test("a167!a")).toBe(false);
+  expect(regex.test("P@ssw0rd")).toBe(true);
 });
