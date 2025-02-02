@@ -84,13 +84,13 @@ Creates a new regex builder instance.
 ### Core Methods
 
 | Method             | Description                                 | Example Output |
-| ------------------ | ------------------------------------------- | -------------- | ---- |
+| ------------------ | ------------------------------------------- | -------------- |
 | `.digit()`         | Adds a digit pattern (`\d`).                | `\d`           |
 | `.word()`          | Adds a word character pattern (`\w`).       | `\w`           |
 | `.whitespace()`    | Adds a whitespace character pattern (`\s`). | `\s`           |
 | `.anyCharacter()`  | Adds a pattern for any character (`.`).     | `.`            |
 | `.literal("text")` | Adds a literal text pattern.                | `["text"]`     |
-| `.or()`            | Adds an OR pattern (`                       | `).            | `\|` |
+| `.or()`            | Adds an OR pattern.                         | `\|`           |
 | `.range("digit")`  | Adds a range pattern for digits (`0-9`).    | `[0-9]`        |
 
 ### Quantifiers
