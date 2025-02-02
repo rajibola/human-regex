@@ -211,3 +211,21 @@ test("whitespace method works correctly", () => {
   expect(regex.test("\t")).toBe(true);
   expect(regex.test("a")).toBe(false);
 });
+
+test("regex works for password validation", () => {
+  const regex = createRegex()
+    .startAnchor()
+    .hasSpecialCharacter()
+    .hasDigit()
+    .hasLetter()
+    .anyCharacter()
+    .atLeast(8)
+    .endAnchor()
+    .toRegExp();
+
+  expect(regex.test("a1234567!")).toBe(true);
+  expect(regex.test("a1234567")).toBe(false);
+  expect(regex.test("a1234567!a")).toBe(true);
+  expect(regex.test("a167!a")).toBe(false);
+  expect(regex.test("P@ssw0rd")).toBe(true);
+});

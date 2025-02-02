@@ -6,6 +6,33 @@
 
 Human-friendly regular expression builder with English-like syntax.
 
+## Features
+
+- 🧩 Intuitive builder pattern with chainable methods
+- 🎯 Prebuilt validators for common patterns (emails, URLs, phone numbers)
+- 📚 Comprehensive character classes and quantifiers
+- 🛡️ Type-safe implementation with TypeScript
+- ⚡ Memoized patterns for better performance
+- 🔍 Supports all standard regex flags
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Basic Example](#basic-example)
+  - [Predefined Patterns](#predefined-patterns)
+- [Comprehensive API Reference](#comprehensive-api-reference)
+  - [Core Methods](#core-methods)
+  - [Quantifiers](#quantifiers)
+  - [Anchors & Groups](#anchors--groups)
+  - [Validation Helpers](#validation-helpers)
+  - [URL Components](#url-components)
+  - [Flags](#flags)
+  - [Predefined Patterns](#predefined-patterns)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
 
 ```bash
@@ -14,46 +41,108 @@ npm install human-regex
 
 ## Usage
 
+### Basic Example
+
 ```javascript
 import { createRegex } from "human-regex";
 
-// Simple password validation
+// Password validation: 8+ chars with special character, digit, and letter
 const passwordRegex = createRegex()
-  .digit() // Must contain digit
-  .special() // Must contain special char
-  .range("alphanumeric") // Must contain alphanumeric char
-  .atLeast(8) // Must be at least 8 characters long
-  .toRegExp(); // Convert to RegExp object
+  .startAnchor()
+  .hasSpecialCharacter()
+  .hasDigit()
+  .hasLetter()
+  .anyCharacter()
+  .atLeast(8)
+  .endAnchor()
+  .toRegExp();
+
+console.log(passwordRegex.test("P@ssw0rd")); // true
 ```
 
-## API Reference
+### Predefined Patterns
+
+```javascript
+import { Patterns } from "human-regex";
+
+// Email validation
+console.log(Patterns.email().test("test@example.com")); // true
+
+// International phone number
+console.log(Patterns.phoneInternational().test("+123-4567890")); // true
+
+// URL validation
+console.log(Patterns.url().test("https://www.example.com/path")); // true
+```
+
+## Comprehensive API Reference
 
 ### `createRegex()`
 
 Creates a new regex builder instance.
 
-### Methods
+### Core Methods
 
-- `.literal(text: string)`: Adds a literal string to the pattern.
-- `.digit()`: Adds a digit pattern (`\d`).
-- `.word()`: Adds a word character pattern (`\w`).
-- `.range(name: string)`: Adds a predefined character range.
-- `.atLeast(n: number)`: Specifies that the preceding element must appear at least `n` times.
-- `.exactly(n: number)`: Specifies that the preceding element must appear exactly `n` times.
-- `.oneOrMore()`: Specifies that the preceding element must appear one or more times.
-- `.optional()`: Specifies that the preceding element is optional.
-- `.zeroOrMore()`: Specifies that the preceding element can appear zero or more times.
-- `.startGroup()`: Starts a non-capturing group.
-- `.endGroup()`: Ends a non-capturing group.
-- `.startAnchor()`: Adds a start-of-string anchor (`^`).
-- `.endAnchor()`: Adds an end-of-string anchor (`$`).
-- `.global()`: Adds the global flag (`g`).
-- `.nonSensitive()`: Adds the case-insensitive flag (`i`).
-- `.multiline()`: Adds the multiline flag (`m`).
-- `.dotAll()`: Adds the dot-all flag (`s`).
-- `.unicode()`: Adds the Unicode flag (`u`).
-- `.sticky()`: Adds the sticky flag (`y`).
-- `.toRegExp()`: Converts the builder to a `RegExp` object.
+| Method             | Description                                 | Example Output |
+| ------------------ | ------------------------------------------- | -------------- | ---- |
+| `.digit()`         | Adds a digit pattern (`\d`).                | `\d`           |
+| `.word()`          | Adds a word character pattern (`\w`).       | `\w`           |
+| `.whitespace()`    | Adds a whitespace character pattern (`\s`). | `\s`           |
+| `.anyCharacter()`  | Adds a pattern for any character (`.`).     | `.`            |
+| `.literal("text")` | Adds a literal text pattern.                | `["text"]`     |
+| `.or()`            | Adds an OR pattern (`                       | `).            | `\|` |
+| `.range("digit")`  | Adds a range pattern for digits (`0-9`).    | `[0-9]`        |
+
+### Quantifiers
+
+| Method               | Description                            | Example Output |
+| -------------------- | -------------------------------------- | -------------- |
+| `.exactly(n)`        | Adds an exact quantifier (`{n}`).      | `{n}`          |
+| `.atLeast(n)`        | Adds a minimum quantifier (`{n,}`).    | `{n,}`         |
+| `.atMost(n)`         | Adds a maximum quantifier (`{0,n}`).   | `{0,n}`        |
+| `.between(min, max)` | Adds a range quantifier (`{min,max}`). | `{min,max}`    |
+| `.oneOrMore()`       | Adds a one-or-more quantifier (`+`).   | `+`            |
+| `.optional()`        | Adds an optional quantifier (`?`).     | `?`            |
+| `.zeroOrMore()`      | Adds a zero-or-more quantifier (`*`).  | `*`            |
+
+### Anchors & Groups
+
+| Method           | Description                           | Example Output |
+| ---------------- | ------------------------------------- | -------------- |
+| `.startGroup()`  | Starts a non-capturing group (`(?:`). | `(?:`          |
+| `.endGroup()`    | Ends a group (`)`).                   | `)`            |
+| `.startAnchor()` | Adds a start anchor (`^`).            | `^`            |
+| `.endAnchor()`   | Adds an end anchor (`$`).             | `$`            |
+
+### Validation Helpers
+
+| Method                   | Description                              | Example Output     |
+| ------------------------ | ---------------------------------------- | ------------------ |
+| `.hasSpecialCharacter()` | Adds a lookahead for special characters. | `(?=.*[!@#$%^&*])` |
+| `.hasDigit()`            | Adds a lookahead for digits.             | `(?=.*\d)`         |
+| `.hasLetter()`           | Adds a lookahead for letters.            | `(?=.*[a-zA-Z])`   |
+
+### URL Components
+
+| Method        | Description                            | Example Output |
+| ------------- | -------------------------------------- | -------------- | ------- | ----- | --- | ----- |
+| `.protocol()` | Adds a protocol pattern (`https?://`). | `https?://`    |
+| `.www()`      | Adds a www pattern (`(www\.)?`).       | `(www\.)?`     |
+| `.tld()`      | Adds a top-level domain pattern (`(com | org            | net)`). | `(com | org | net)` |
+| `.path()`     | Adds a path pattern (`(/\w+)*`).       | `(/\w+)*`      |
+
+### Flags
+
+| Method            | Description                           | Example Output |
+| ----------------- | ------------------------------------- | -------------- |
+| `.global()`       | Adds the global flag (`g`).           | `g`            |
+| `.nonSensitive()` | Adds the case-insensitive flag (`i`). | `i`            |
+
+### Predefined Patterns
+
+- `Patterns.email`: Predefined email pattern.
+- `Patterns.url`: Predefined URL pattern.
+- `Patterns.phoneInternational`: Predefined international phone number pattern.
 
 ## Examples
 
