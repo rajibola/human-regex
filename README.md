@@ -128,8 +128,8 @@ Creates a new regex builder instance.
 | ------------- | -------------------------------------- | ------------------------- |
 | `.protocol()` | Adds a protocol pattern (`https?://`). | `https?://`               |
 | `.www()`      | Adds a www pattern (`(www\.)?`).       | `(www\.)?`                |
-| `.tld()`      | Adds a top-level domain pattern.       | \[\"\(com\|org\|net\)\"\] |
 | `.path()`     | Adds a path pattern (`(/\w+)*`).       | `(/\w+)*`                 |
+| `.tld()`      | Adds a top-level domain pattern.       | \[\"\(com\|org\|net\)\"\] |
 
 ### Flags
 
