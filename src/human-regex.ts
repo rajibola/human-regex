@@ -1,4 +1,4 @@
-// human-regex.js
+// human-regex.ts
 // Static cache for escaped literals
 const escapeCache = new Map<string, string>();
 
@@ -79,6 +79,23 @@ class HumanRegex {
 
   letter(): this {
     return this.add("[a-zA-Z]");
+  }
+
+  anyCharacter(): this {
+    return this.add(".");
+  }
+
+  // Lookaheads for validation
+  hasSpecialCharacter(): this {
+    return this.add("(?=.*[!@#$%^&*])");
+  }
+
+  hasDigit(): this {
+    return this.add("(?=.*\\d)");
+  }
+
+  hasLetter(): this {
+    return this.add("(?=.*[a-zA-Z])");
   }
 
   // Quantifiers
