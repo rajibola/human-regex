@@ -38,6 +38,7 @@ export class HumanRegex {
   or(): this;
   range(name: RangeKeys): this;
   letter(): this;
+  anyCharacter(): this;
 
   exactly(n: number): this;
   atLeast(n: number): this;
