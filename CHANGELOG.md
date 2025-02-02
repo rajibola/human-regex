@@ -87,3 +87,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Declaration file for module
+
+## [2.0.4] - 2025-02-02
+
+### Added
+
+- `anyCharacter` method and tests
+- updated README
