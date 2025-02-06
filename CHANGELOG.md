@@ -120,3 +120,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New method `.repeat(count)` to repeat the previous pattern exactly count times.
 - New method `.nonWhitespace()` to match any non-whitespace character.
 - New method `.notRange("aeiou")` to match any character not in the specified set.
+
+## [2.1.1] - 2025-02-06
+
+### Added
+
+- New test cases for `.startCaptureGroup()`: Verifies that capturing groups are created correctly.
+- New test cases for `.nonWordBoundary()`: Ensures that non-word boundary assertions work as intended.
+- New test cases for `.unicodeChar('l')`: Confirms that Unicode characters with the 'l' variant match accurately.
+
+### Error Handling
+
+- Throws an error when an invalid Unicode letter variant is provided.
+- Throws an error if there is no pattern available to repeat.
