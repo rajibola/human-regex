@@ -422,7 +422,6 @@ test("literal escapes special characters", () => {
 });
 
 test("positiveLookahead works correctly", () => {
-  // This should match "foo" only if followed by "bar"
   const regex = createRegex()
     .literal("foo")
     .positiveLookahead("bar")
@@ -432,7 +431,6 @@ test("positiveLookahead works correctly", () => {
 });
 
 test("positiveLookbehind works correctly", () => {
-  // Matches "bar" only if preceded by "foo"
   const regex = createRegex()
     .positiveLookbehind("foo")
     .literal("bar")
@@ -442,7 +440,6 @@ test("positiveLookbehind works correctly", () => {
 });
 
 test("negativeLookbehind works correctly", () => {
-  // Matches "bar" only if not preceded by "foo"
   const regex = createRegex()
     .negativeLookbehind("foo")
     .literal("bar")
@@ -452,26 +449,20 @@ test("negativeLookbehind works correctly", () => {
 });
 
 test("unicodeDigit matches Unicode digits", () => {
-  // Unicode digit should match both ASCII and non-ASCII digits (if available)
   const regex = createRegex().unicodeDigit().toRegExp();
   expect(regex.test("5")).toBe(true);
-  // For some non-ASCII numeral, depending on Unicode data:
   expect(regex.test("٥")).toBe(true); // Arabic-Indic digit 5
 });
 
 test("unicodePunctuation matches Unicode punctuation", () => {
   const regex = createRegex().unicodePunctuation().toRegExp();
-  // The character "，" is a Unicode punctuation (fullwidth comma)
   expect(regex.test("，")).toBe(true);
-  // Regular letter should not match
   expect(regex.test("a")).toBe(false);
 });
 
 test("unicodeSymbol matches Unicode symbols", () => {
   const regex = createRegex().unicodeSymbol().toRegExp();
-  // For example, "♠" is a Unicode symbol
   expect(regex.test("♠")).toBe(true);
-  // A digit should not match
   expect(regex.test("3")).toBe(false);
 });
 
@@ -484,12 +475,10 @@ test("letter method matches letters correctly", () => {
 
 test("word method matches word characters", () => {
   const regex = createRegex().word().toRegExp();
-  // Should match letters, digits, and underscore
   expect(regex.test("a")).toBe(true);
   expect(regex.test("Z")).toBe(true);
   expect(regex.test("5")).toBe(true);
   expect(regex.test("_")).toBe(true);
-  // Should not match a space
   expect(regex.test(" ")).toBe(false);
 });
 
@@ -503,12 +492,10 @@ test("named capture group extracts the captured text", () => {
     .literal("end")
     .toRegExp();
   const match = "12345-end".match(regex);
-  // Ensure the named group 'digits' was captured correctly.
   expect(match?.groups?.digits).toBe("12345");
 });
 
 test("repeat method repeats a complex pattern", () => {
-  // Build a pattern that matches a group (digit + literal "-") repeated 3 times.
   const regex = createRegex()
     .startGroup()
     .digit()
@@ -518,4 +505,40 @@ test("repeat method repeats a complex pattern", () => {
     .toRegExp();
   expect(regex.test("1-2-3-")).toBe(true);
   expect(regex.test("1-2-")).toBe(false);
+});
+
+test("startCaptureGroup creates a capturing group", () => {
+  const regex = createRegex()
+    .startCaptureGroup()
+    .literal("hello")
+    .endGroup()
+    .literal(" world")
+    .toRegExp();
+  const match = "hello world".match(regex);
+  expect(match?.[1]).toBe("hello");
+});
+
+test("nonWordBoundary works correctly", () => {
+  const regex = createRegex()
+    .nonWordBoundary()
+    .literal("test")
+    .nonWordBoundary()
+    .toRegExp();
+  expect(regex.test("atestb")).toBe(true);
+  expect(regex.test(" test ")).toBe(false);
+});
+
+test("unicodeChar with variant 'l' matches correctly", () => {
+  const regex = createRegex().unicodeChar("l").toRegExp();
+  expect(regex.test("a")).toBe(true);
+});
+
+test("throws error for invalid Unicode letter variant", () => {
+  expect(() => createRegex().unicodeChar("x" as any)).toThrow(
+    "Invalid Unicode letter variant: x"
+  );
+});
+
+test("throws error when no pattern is available to repeat", () => {
+  expect(() => createRegex().repeat(3)).toThrow("No pattern to repeat");
 });
