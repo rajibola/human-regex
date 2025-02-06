@@ -100,3 +100,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - updated README
+
+## [2.1.0] - 2025-02-06
+
+### Added
+
+- New method `.multiline()` to add the multiline flag.
+- New method `.dotAll()` to add the dot-all flag.
+- New method `.sticky()` to add the sticky flag.
+- New method `.unicodeChar()` to match Unicode characters.
+- New method `.unicodeDigit()` to match Unicode digits.
+- New method `.unicodePunctuation()` to match Unicode punctuation.
+- New method `.unicodeSymbol()` to match Unicode symbols.
+- New method `.startCaptureGroup()` to start a capturing group.
+- New method `.startNamedGroup("name")` to start a named capturing group.
+- New method `.wordBoundary()` to add a word boundary assertion.
+- New method `.nonWordBoundary()` to add a non-word boundary assertion.
+- New method `.lazy()` to make the previous quantifier lazy.
+- New method `.repeat(count)` to repeat the previous pattern exactly count times.
+- New method `.nonWhitespace()` to match any non-whitespace character.
+- New method `.notRange("aeiou")` to match any character not in the specified set.
