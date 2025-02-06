@@ -28,6 +28,7 @@ Human-friendly regular expression builder with English-like syntax.
   - [Validation Helpers](#validation-helpers)
   - [URL Components](#url-components)
   - [Flags](#flags)
+  - [Unicode Properties](#unicode-properties)
   - [Predefined Patterns](#predefined-patterns)
 - [Examples](#examples)
 - [Contributing](#contributing)
@@ -83,36 +84,44 @@ Creates a new regex builder instance.
 
 ### Core Methods
 
-| Method             | Description                                 | Example Output |
-| ------------------ | ------------------------------------------- | -------------- |
-| `.digit()`         | Adds a digit pattern (`\d`).                | `\d`           |
-| `.word()`          | Adds a word character pattern (`\w`).       | `\w`           |
-| `.whitespace()`    | Adds a whitespace character pattern (`\s`). | `\s`           |
-| `.anyCharacter()`  | Adds a pattern for any character (`.`).     | `.`            |
-| `.literal("text")` | Adds a literal text pattern.                | `["text"]`     |
-| `.or()`            | Adds an OR pattern.                         | `\|`           |
-| `.range("digit")`  | Adds a range pattern for digits (`0-9`).    | `[0-9]`        |
+| Method               | Description                                     | Example Output |
+| -------------------- | ----------------------------------------------- | -------------- |
+| `.digit()`           | Adds a digit pattern (`\d`).                    | `\d`           |
+| `.word()`            | Adds a word character pattern (`\w`).           | `\w`           |
+| `.whitespace()`      | Adds a whitespace character pattern (`\s`).     | `\s`           |
+| `.nonWhitespace()`   | Adds a non-whitespace character pattern (`\S`). | `\S`           |
+| `.anyCharacter()`    | Adds a pattern for any character (`.`).         | `.`            |
+| `.literal("text")`   | Adds a literal text pattern.                    | `["text"]`     |
+| `.or()`              | Adds an OR pattern.                             | `\|`           |
+| `.range("digit")`    | Adds a range pattern for digits (`0-9`).        | `[0-9]`        |
+| `.notRange("aeiou")` | Adds a range pattern for digits (`0-9`).        | `[0-9]`        |
 
 ### Quantifiers
 
-| Method               | Description                            | Example Output |
-| -------------------- | -------------------------------------- | -------------- |
-| `.exactly(n)`        | Adds an exact quantifier (`{n}`).      | `{n}`          |
-| `.atLeast(n)`        | Adds a minimum quantifier (`{n,}`).    | `{n,}`         |
-| `.atMost(n)`         | Adds a maximum quantifier (`{0,n}`).   | `{0,n}`        |
-| `.between(min, max)` | Adds a range quantifier (`{min,max}`). | `{min,max}`    |
-| `.oneOrMore()`       | Adds a one-or-more quantifier (`+`).   | `+`            |
-| `.optional()`        | Adds an optional quantifier (`?`).     | `?`            |
-| `.zeroOrMore()`      | Adds a zero-or-more quantifier (`*`).  | `*`            |
+| Method               | Description                                       | Example Output |
+| -------------------- | ------------------------------------------------- | -------------- |
+| `.exactly(n)`        | Adds an exact quantifier (`{n}`).                 | `{n}`          |
+| `.atLeast(n)`        | Adds a minimum quantifier (`{n,}`).               | `{n,}`         |
+| `.atMost(n)`         | Adds a maximum quantifier (`{0,n}`).              | `{0,n}`        |
+| `.between(min, max)` | Adds a range quantifier (`{min,max}`).            | `{min,max}`    |
+| `.oneOrMore()`       | Adds a one-or-more quantifier (`+`).              | `+`            |
+| `.optional()`        | Adds an optional quantifier (`?`).                | `?`            |
+| `.zeroOrMore()`      | Adds a zero-or-more quantifier (`*`).             | `*`            |
+| `.lazy()`            | Makes the previous quantifier lazy.               | `?`            |
+| `.repeat(count)`     | Repeats the previous pattern exactly count times. | `{count}`      |
 
 ### Anchors & Groups
 
-| Method           | Description                           | Example Output |
-| ---------------- | ------------------------------------- | -------------- |
-| `.startGroup()`  | Starts a non-capturing group (`(?:`). | `(?:`          |
-| `.endGroup()`    | Ends a group (`)`).                   | `)`            |
-| `.startAnchor()` | Adds a start anchor (`^`).            | `^`            |
-| `.endAnchor()`   | Adds an end anchor (`$`).             | `$`            |
+| Method                     | Description                                | Example Output |
+| -------------------------- | ------------------------------------------ | -------------- |
+| `.startGroup()`            | Starts a non-capturing group (`(?:`).      | `(?:`          |
+| `.startCaptureGroup()`     | Starts a capturing group (`(`).            | `(`            |
+| `.startNamedGroup("name")` | Starts a named capturing group.            | `(?<name>`     |
+| `.endGroup()`              | Ends a group (`)`).                        | `)`            |
+| `.startAnchor()`           | Adds a start anchor (`^`).                 | `^`            |
+| `.endAnchor()`             | Adds an end anchor (`$`).                  | `$`            |
+| `.wordBoundary()`          | Adds a word boundary assertion (`\b`).     | `\b`           |
+| `.nonWordBoundary()`       | Adds a non-word boundary assertion (`\B`). | `\B`           |
 
 ### Validation Helpers
 
@@ -137,6 +146,18 @@ Creates a new regex builder instance.
 | ----------------- | ------------------------------------- | -------------- |
 | `.global()`       | Adds the global flag (`g`).           | `g`            |
 | `.nonSensitive()` | Adds the case-insensitive flag (`i`). | `i`            |
+| `.multiline()`    | Adds the multiline flag (`m`).        | `m`            |
+| `.dotAll()`       | Adds the dot-all flag (`s`).          | `s`            |
+| `.sticky()`       | Adds the sticky flag (`y`).           | `y`            |
+
+### Unicode Properties
+
+| Method                  | Description                  | Example Output |
+| ----------------------- | ---------------------------- | -------------- |
+| `.unicodeChar()`        | Matches Unicode characters.  | `\p{L}`        |
+| `.unicodeDigit()`       | Matches Unicode digits.      | `\p{N}`        |
+| `.unicodePunctuation()` | Matches Unicode punctuation. | `\p{P}`        |
+| `.unicodeSymbol()`      | Matches Unicode symbols.     | `\p{S}`        |
 
 ### Predefined Patterns
 
