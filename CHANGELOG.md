@@ -133,3 +133,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Throws an error when an invalid Unicode letter variant is provided.
 - Throws an error if there is no pattern available to repeat.
+
+## [2.1.2] - 2025-02-08
+
+### Added
+
+- PR template file
+- Added `deploy.yml` file for deployment workflow
+
+### Changed
+
+- Updated `test.yml` file

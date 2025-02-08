@@ -1,6 +1,6 @@
 {
   "name": "human-regex",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Human-friendly regex builder with English-like syntax",
   "main": "dist/human-regex.cjs.js",
   "module": "dist/human-regex.esm.js",
@@ -47,5 +47,13 @@
   },
   "dependencies": {
     "tslib": "^2.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rajibola/human-regex.git"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/rajibola"
   }
 }
