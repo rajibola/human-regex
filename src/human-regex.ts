@@ -1,3 +1,5 @@
+type PartialBut<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+
 const escapeCache = new Map<string, string>();
 
 const Flags = {
@@ -26,6 +28,24 @@ const Quantifiers = Object.freeze({
   optional: "?",
 });
 
+type Quantifiers =
+  | "exactly"
+  | "atLeast"
+  | "atMost"
+  | "between"
+  | "oneOrMore"
+  | "zeroOrMore"
+  | "repeat";
+type QuantifierMethods = Quantifiers | "optional" | "lazy";
+
+type WithLazy = HumanRegex;
+type Base = Omit<HumanRegex, "lazy">;
+
+type AtStart = Omit<Base, QuantifierMethods | "endGroup">;
+type AfterAnchor = Omit<Base, QuantifierMethods | "or">;
+type SimpleQuantifier = Omit<Base, Quantifiers>;
+type LazyQuantifier = Omit<WithLazy, Quantifiers>;
+
 class HumanRegex {
   private parts: string[];
   private flags: Set<string>;
@@ -35,23 +55,23 @@ class HumanRegex {
     this.flags = new Set<string>();
   }
 
-  digit(): this {
+  digit(): Base {
     return this.add("\\d");
   }
 
-  special(): this {
+  special(): Base {
     return this.add("(?=.*[!@#$%^&*])");
   }
 
-  word(): this {
+  word(): Base {
     return this.add("\\w");
   }
 
-  whitespace(): this {
+  whitespace(): Base {
     return this.add("\\s");
   }
 
-  nonWhitespace(): this {
+  nonWhitespace(): Base {
     return this.add("\\S");
   }
 
@@ -59,119 +79,119 @@ class HumanRegex {
     return this.add(escapeLiteral(text));
   }
 
-  or(): this {
+  or(): AfterAnchor {
     return this.add("|");
   }
 
-  range(name: RangeKeys): this {
+  range(name: RangeKeys): Base {
     const range = Ranges[name];
     if (!range) throw new Error(`Unknown range: ${name}`);
     return this.add(`[${range}]`);
   }
 
-  notRange(chars: string): this {
+  notRange(chars: string): Base {
     return this.add(`[^${chars}]`);
   }
 
-  lazy(): this {
+  lazy(): Base {
     const lastPart = this.parts.pop();
     if (!lastPart) throw new Error("No quantifier to make lazy");
     return this.add(`${lastPart}?`);
   }
 
-  startNamedGroup(name: string): this {
-    return this.add(`(?<${name}>`);
-  }
-
-  letter(): this {
+  letter(): Base {
     return this.add("[a-zA-Z]");
   }
 
-  anyCharacter(): this {
+  anyCharacter(): Base {
     return this.add(".");
   }
 
-  negativeLookahead(pattern: string): this {
+  negativeLookahead(pattern: string): Base {
     return this.add(`(?!${pattern})`);
   }
 
-  positiveLookahead(pattern: string): this {
+  positiveLookahead(pattern: string): Base {
     return this.add(`(?=${pattern})`);
   }
 
-  positiveLookbehind(pattern: string): this {
+  positiveLookbehind(pattern: string): Base {
     return this.add(`(?<=${pattern})`);
   }
 
-  negativeLookbehind(pattern: string): this {
+  negativeLookbehind(pattern: string): Base {
     return this.add(`(?<!${pattern})`);
   }
 
-  hasSpecialCharacter(): this {
+  hasSpecialCharacter(): Base {
     return this.add("(?=.*[!@#$%^&*])");
   }
 
-  hasDigit(): this {
+  hasDigit(): Base {
     return this.add("(?=.*\\d)");
   }
 
-  hasLetter(): this {
+  hasLetter(): Base {
     return this.add("(?=.*[a-zA-Z])");
   }
 
-  exactly(n: number): this {
-    return this.add(`{${n}}`);
-  }
-
-  atLeast(n: number): this {
-    return this.add(`{${n},}`);
-  }
-
-  atMost(n: number): this {
-    return this.add(`{0,${n}}`);
-  }
-
-  between(min: number, max: number): this {
-    return this.add(`{${min},${max}}`);
-  }
-
-  oneOrMore(): this {
-    return this.add(Quantifiers.oneOrMore);
-  }
-
-  optional(): this {
+  optional(): SimpleQuantifier {
     return this.add(Quantifiers.optional);
   }
 
-  zeroOrMore(): this {
+  exactly(n: number): SimpleQuantifier {
+    return this.add(`{${n}}`);
+  }
+
+  atLeast(n: number): LazyQuantifier {
+    return this.add(`{${n},}`);
+  }
+
+  atMost(n: number): LazyQuantifier {
+    return this.add(`{0,${n}}`);
+  }
+
+  between(min: number, max: number): LazyQuantifier {
+    return this.add(`{${min},${max}}`);
+  }
+
+  oneOrMore(): LazyQuantifier {
+    return this.add(Quantifiers.oneOrMore);
+  }
+
+  zeroOrMore(): LazyQuantifier {
     return this.add(Quantifiers.zeroOrMore);
   }
 
-  startGroup(): this {
+  startNamedGroup(name: string): AfterAnchor {
+    return this.add(`(?<${name}>`);
+  }
+
+  startGroup(): AfterAnchor {
     return this.add("(?:");
   }
 
-  startCaptureGroup(): this {
+  startCaptureGroup(): AfterAnchor {
     return this.add("(");
   }
 
-  wordBoundary(): this {
+  wordBoundary(): Base {
     return this.add("\\b");
   }
 
-  nonWordBoundary(): this {
+  nonWordBoundary(): Base {
     return this.add("\\B");
   }
 
-  endGroup(): this {
+  endGroup(): Base {
     return this.add(")");
   }
 
-  startAnchor(): this {
+  startAnchor(): AfterAnchor {
     return this.add("^");
   }
 
-  endAnchor(): this {
+  endAnchor(): AfterAnchor {
     return this.add("$");
   }
 
@@ -200,7 +220,7 @@ class HumanRegex {
     return this;
   }
 
-  unicodeChar(variant?: "u" | "l" | "t" | "m" | "o"): this {
+  unicodeChar(variant?: "u" | "l" | "t" | "m" | "o"): Base {
     this.flags.add(Flags.UNICODE);
     const validVariants = new Set(["u", "l", "t", "m", "o"] as const);
 
@@ -211,22 +231,22 @@ class HumanRegex {
     return this.add(`\\p{L${variant ?? ""}}`);
   }
 
-  unicodeDigit(): this {
+  unicodeDigit(): Base {
     this.flags.add(Flags.UNICODE);
     return this.add("\\p{N}");
   }
 
-  unicodePunctuation(): this {
+  unicodePunctuation(): Base {
     this.flags.add(Flags.UNICODE);
     return this.add("\\p{P}");
   }
 
-  unicodeSymbol(): this {
+  unicodeSymbol(): Base {
     this.flags.add(Flags.UNICODE);
     return this.add("\\p{S}");
   }
 
-  repeat(count: number): this {
+  repeat(count: number): Base {
     if (this.parts.length === 0) {
       throw new Error("No pattern to repeat");
     }
@@ -236,23 +256,23 @@ class HumanRegex {
     return this;
   }
 
-  ipv4Octet(): this {
+  ipv4Octet(): Base {
     return this.add("(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)");
   }
 
-  protocol(): this {
+  protocol(): Base {
     return this.add("https?://");
   }
 
-  www(): this {
+  www(): Base {
     return this.add("(www\\.)?");
   }
 
-  tld(): this {
+  tld(): Base {
     return this.add("(com|org|net)");
   }
 
-  path(): this {
+  path(): Base {
     return this.add("(/\\w+)*");
   }
 
@@ -277,10 +297,10 @@ function escapeLiteral(text: string): string {
   return escapeCache.get(text)!;
 }
 
-const createRegex = (): HumanRegex => new HumanRegex();
+const createRegex = (): AtStart => new HumanRegex();
 
 const Patterns = (() => {
-  const createCachedPattern = (builder: () => HumanRegex) => {
+  const createCachedPattern = (builder: () => PartialBut<HumanRegex, "toRegExp">) => {
     const regex = builder().toRegExp();
     return () => new RegExp(regex.source, regex.flags);
   };
