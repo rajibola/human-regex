@@ -19,7 +19,17 @@
     "builder",
     "pattern"
   ],
-  "author": "Ridwan Ajibola <rajibola1997@gmail.com>",
+  "author": {
+    "name": "Ridwan Ajibola",
+    "email": "rajibola1997@gmail.com",
+    "url": "https://github.com/rajibola"
+  },
+  "contributors": [
+    {
+      "name": "busyboxkitty",
+      "url": "https://github.com/busyboxkitty"
+    }
+  ],
   "license": "MIT",
   "files": [
     "dist",
