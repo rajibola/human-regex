@@ -154,3 +154,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated tests for `.lazy()` and `.repeat(count)` to use `@ts-expect-error` for disallowed calls on an empty pattern, ensuring that these methods are correctly prevented at compile time rather than relying on runtime errors.
+
+## [2.1.4] - 2025-02-14
+
+### Added
+
+- Added @busyboxkitty as a contributor to `package.json`
