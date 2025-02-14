@@ -413,6 +413,7 @@ test("repeat works with complex patterns", () => {
 });
 
 test("throws error when making empty pattern lazy", () => {
+  // @ts-expect-error: Cannot call .lazy() on an empty pattern.
   expect(() => createRegex().lazy()).toThrow("No quantifier to make lazy");
 });
 
@@ -540,5 +541,6 @@ test("throws error for invalid Unicode letter variant", () => {
 });
 
 test("throws error when no pattern is available to repeat", () => {
+  // @ts-expect-error: Cannot call .repeat(3) on an empty pattern.
   expect(() => createRegex().repeat(3)).toThrow("No pattern to repeat");
 });
