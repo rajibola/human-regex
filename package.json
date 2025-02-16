@@ -1,6 +1,6 @@
 {
   "name": "human-regex",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Human-friendly regex builder with English-like syntax",
   "main": "dist/human-regex.cjs.js",
   "module": "dist/human-regex.esm.js",
@@ -28,6 +28,10 @@
     {
       "name": "busyboxkitty",
       "url": "https://github.com/busyboxkitty"
+    },
+    {
+      "name": "Marlon Evangelista",
+      "url": "https://github.com/MForMarlon"
     }
   ],
   "license": "MIT",

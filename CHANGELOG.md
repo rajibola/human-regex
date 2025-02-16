@@ -160,3 +160,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added @busyboxkitty as a contributor to `package.json`
+
+## [2.1.5] - 2025-02-16
+
+### Added
+
+- Added @MForMarlon as a contributor to `package.json`
+
+### Fixed
+
+- Copy-paste error with `.notRange` documentation fix by @MForMarlon
+- Update `index.d.ts` to include new magic typing support
