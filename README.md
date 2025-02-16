@@ -94,7 +94,7 @@ Creates a new regex builder instance.
 | `.literal("text")`   | Adds a literal text pattern.                    | `["text"]`     |
 | `.or()`              | Adds an OR pattern.                             | `\|`           |
 | `.range("digit")`    | Adds a range pattern for digits (`0-9`).        | `[0-9]`        |
-| `.notRange("aeiou")` | Adds a range pattern for digits (`0-9`).        | `[0-9]`        |
+| `.notRange("aeiou")` | Excludes characters from the pattern.           | `[^aeiou]`     |
 
 ### Quantifiers
 
