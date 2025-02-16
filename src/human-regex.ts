@@ -40,7 +40,6 @@ type QuantifierMethods = Quantifiers | "optional" | "lazy";
 
 type WithLazy = HumanRegex;
 type Base = Omit<HumanRegex, "lazy">;
-
 type AtStart = Omit<Base, QuantifierMethods | "endGroup">;
 type AfterAnchor = Omit<Base, QuantifierMethods | "or">;
 type SimpleQuantifier = Omit<Base, Quantifiers>;
@@ -300,7 +299,9 @@ function escapeLiteral(text: string): string {
 const createRegex = (): AtStart => new HumanRegex();
 
 const Patterns = (() => {
-  const createCachedPattern = (builder: () => PartialBut<HumanRegex, "toRegExp">) => {
+  const createCachedPattern = (
+    builder: () => PartialBut<HumanRegex, "toRegExp">
+  ) => {
     const regex = builder().toRegExp();
     return () => new RegExp(regex.source, regex.flags);
   };
