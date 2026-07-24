@@ -60,6 +60,7 @@ export class HumanRegex {
   whitespace(): Base;
   nonWhitespace(): Base;
   literal(text: string): this;
+  regex(input: RegExp | string): Base;
   or(): AfterAnchor;
 
   range(name: RangeKeys): Base;

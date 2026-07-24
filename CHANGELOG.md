@@ -31,6 +31,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [Security-related updates]
 
+### Added
+
+- `regex(input)` method to splice an existing `RegExp` or pattern string into the
+  chain. Flags from a passed `RegExp` are merged, and an invalid pattern string
+  throws a descriptive error pointing to `.literal()`.
+
+### Fixed
+
+- Implemented the previously-documented `.regex()` method, which was referenced in
+  the README, advanced usage, and FAQ but never existed and threw
+  `TypeError: createRegex(...).regex is not a function` at runtime.
+- `.repeat(count)` now wraps the repeated pattern in a non-capturing group
+  (`(?:...)`) instead of a capturing one, so it no longer shifts the numbering of
+  the user's own capture groups.
+
+### Contributors
+
+- Hammed Abdulazeez (@lurdharry)
+
 ---
 
 ## [2.2.0] - 2025-12-08
@@ -45,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dual module support for CommonJS and ES Modules.
 
 ### Contributors
+
 - Thomas Lamant (@tmlmt)
 
 ---

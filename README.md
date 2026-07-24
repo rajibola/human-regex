@@ -92,6 +92,7 @@ Creates a new regex builder instance.
 | `.nonWhitespace()`   | Adds a non-whitespace character pattern (`\S`). | `\S`           |
 | `.anyCharacter()`    | Adds a pattern for any character (`.`).         | `.`            |
 | `.literal("text")`   | Adds a literal text pattern.                    | `["text"]`     |
+| `.regex(input)`      | Splices an existing `RegExp`/pattern string in. | `^[A-Z]`       |
 | `.or()`              | Adds an OR pattern.                             | `\|`           |
 | `.newline()`         | Adds a pattern for newline characters.          | `(\r\n\|\r\|\n)` |
 | `.range("digit")`    | Adds a range pattern for digits (`0-9`).        | `[0-9]`        |

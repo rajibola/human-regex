@@ -578,3 +578,59 @@ test("expect newline(s) to be detected properly", () => {
 second line`)).toBe(true);
   expect(regex.test("test")).toBe(false);
 });
+
+test("regex method splices an existing RegExp into the chain", () => {
+  const basePattern = /^[A-Z]/;
+  const regex = createRegex().regex(basePattern).digit().exactly(3).toRegExp();
+  expect(regex.source).toBe("^[A-Z]\\d{3}");
+  expect(regex.test("A123")).toBe(true);
+  expect(regex.test("a123")).toBe(false);
+  expect(regex.test("A12")).toBe(false);
+});
+
+test("regex method accepts a raw string pattern", () => {
+  const regex = createRegex().regex("[A-Z]").digit().exactly(2).toRegExp();
+  expect(regex.source).toBe("[A-Z]\\d{2}");
+  expect(regex.test("A12")).toBe(true);
+});
+
+test("regex method merges flags from the provided RegExp", () => {
+  const regex = createRegex().regex(/abc/gi).toRegExp();
+  expect(regex.flags).toContain("g");
+  expect(regex.flags).toContain("i");
+});
+
+test("regex method throws a helpful error for an invalid pattern string", () => {
+  expect(() => createRegex().regex("(")).toThrow(
+    'Invalid regex pattern passed to .regex(): "(". If you meant to match this text literally, use .literal() instead.',
+  );
+  expect(() => createRegex().regex("[a")).toThrow(
+    'Invalid regex pattern passed to .regex(): "[a". If you meant to match this text literally, use .literal() instead.',
+  );
+  expect(() => createRegex().regex("*")).toThrow(
+    'Invalid regex pattern passed to .regex(): "*". If you meant to match this text literally, use .literal() instead.',
+  );
+});
+
+test("regex method allows ordinary text that is a valid pattern", () => {
+  const regex = createRegex().regex("hello").toRegExp();
+  expect(regex.test("hello")).toBe(true);
+});
+
+test("repeat uses a non-capturing group so it does not shift capture indices", () => {
+  const regex = createRegex()
+    .digit()
+    .repeat(2)
+    .startCaptureGroup()
+    .letter()
+    .oneOrMore()
+    .endGroup()
+    .toRegExp();
+
+  // repeat must not create its own capture group
+  expect(regex.source).toBe("(?:\\d){2}([a-zA-Z]+)");
+
+  // the user's group stays at index 1
+  const match = "12ab".match(regex);
+  expect(match?.[1]).toBe("ab");
+});
