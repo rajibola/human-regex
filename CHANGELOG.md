@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+<!-- TEMPLATE: copy the sections below into a new entry and replace the bracketed placeholders. -->
+
 ### Added
 
 - [Brief description of new features]
@@ -30,6 +32,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - [Security-related updates]
+
+<!-- Current update -->
+
+### Changed
+
+- `.tld()` now matches any letters-based top-level domain by default
+  (`[a-zA-Z]{2,}`) instead of only `com|org|net`, and accepts an optional list to
+  restrict it, e.g. `.tld(["com", "org"])`.
+
+### Fixed
+
+- `Patterns.email` now accepts dots and plus-addressing in the local part
+  (e.g. `name.surname@example.com`, `user+tag@example.com`).
+- `Patterns.url` now accepts any top-level domain, subdomains, and an optional
+  query string, instead of rejecting valid URLs like `https://example.io`.
+- `Patterns.phoneInternational` now accepts a hyphen, a space, or no separator
+  after the country code.
+
+### Contributors
+
+- Hammed Abdulazeez (@lurdharry)
 
 ---
 

@@ -143,7 +143,7 @@ Creates a new regex builder instance.
 | `.protocol()` | Adds a protocol pattern (`https?://`). | `https?://`               |
 | `.www()`      | Adds a www pattern (`(www\.)?`).       | `(www\.)?`                |
 | `.path()`     | Adds a path pattern (`(/\w+)*`).       | `(/\w+)*`                 |
-| `.tld()`      | Adds a top-level domain pattern.       | \[\"\(com\|org\|net\)\"\] |
+| `.tld()`      | Adds a top-level domain pattern. Matches any letters TLD by default, or pass a list to restrict it, e.g. `.tld(["com", "org"])`. | `([a-zA-Z]{2,})` |
 
 ### Flags
 
@@ -166,9 +166,9 @@ Creates a new regex builder instance.
 
 ### Predefined Patterns
 
-- `Patterns.email`: Predefined email pattern.
-- `Patterns.url`: Predefined URL pattern.
-- `Patterns.phoneInternational`: Predefined international phone number pattern.
+- `Patterns.email`: Predefined email pattern. Allows dots and plus-addressing in the local part (e.g. `name.surname@example.com`, `user+tag@example.com`).
+- `Patterns.url`: Predefined URL pattern. Accepts any TLD, subdomains, and an optional query string.
+- `Patterns.phoneInternational`: Predefined international phone number pattern. Accepts a hyphen, a space, or no separator after the country code.
 
 ### Predefined Ranges
 

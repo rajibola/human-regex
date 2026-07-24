@@ -411,12 +411,22 @@ test("path matches valid URL paths", () => {
   expect(regex.test("/invalid@path")).toBe(false);
 });
 
-test("tld matches valid top-level domains", () => {
+test("tld matches any letters-based top-level domain by default", () => {
   const regex = createRegex().startAnchor().tld().endAnchor().toRegExp();
   expect(regex.test("com")).toBe(true);
   expect(regex.test("net")).toBe(true);
   expect(regex.test("org")).toBe(true);
-  expect(regex.test("invalid")).toBe(false);
+  expect(regex.test("io")).toBe(true);
+  expect(regex.test("museum")).toBe(true);
+  expect(regex.test("a")).toBe(false); // needs at least 2 letters
+  expect(regex.test("12")).toBe(false); // digits are not a tld
+});
+
+test("tld restricts to a provided list when given one", () => {
+  const regex = createRegex().startAnchor().tld(["com", "org"]).endAnchor().toRegExp();
+  expect(regex.test("com")).toBe(true);
+  expect(regex.test("org")).toBe(true);
+  expect(regex.test("io")).toBe(false);
 });
 
 test("www matches optional www prefix", () => {
@@ -577,4 +587,30 @@ test("expect newline(s) to be detected properly", () => {
   expect(regex.test(`first line
 second line`)).toBe(true);
   expect(regex.test("test")).toBe(false);
+});
+
+test("email pattern accepts dots and plus-addressing in the local part", () => {
+  const regex = Patterns.email();
+  expect(regex.test("name.surname@example.com")).toBe(true);
+  expect(regex.test("user+tag@example.com")).toBe(true);
+  expect(regex.test("user@sub.example.co.uk")).toBe(true);
+  expect(regex.test("bad@@example.com")).toBe(false);
+  expect(regex.test("noatsign.com")).toBe(false);
+});
+
+test("url pattern accepts any tld, subdomains, and a query string", () => {
+  const regex = Patterns.url();
+  expect(regex.test("https://example.io")).toBe(true);
+  expect(regex.test("https://sub.example.org/a/b")).toBe(true);
+  expect(regex.test("https://example.com?q=1")).toBe(true);
+  expect(regex.test("http://www.example.com")).toBe(true);
+  expect(regex.test("ftp://example.com")).toBe(false);
+});
+
+test("phoneInternational accepts a space or hyphen separator or none", () => {
+  const regex = Patterns.phoneInternational;
+  expect(regex().test("+44 7911123456")).toBe(true);
+  expect(regex().test("+1-2025550123")).toBe(true);
+  expect(regex().test("+12025550123")).toBe(true);
+  expect(regex().test("12025550123")).toBe(false);
 });

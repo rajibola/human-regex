@@ -121,7 +121,7 @@ export class HumanRegex {
   ipv4Octet(): Base;
   protocol(): Base;
   www(): Base;
-  tld(): Base;
+  tld(list?: string[]): Base;
   path(): Base;
 
   toString(): string;

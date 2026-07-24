@@ -281,8 +281,12 @@ class HumanRegex {
     return this.add("(www\\.)?");
   }
 
-  tld(): Base {
-    return this.add("(com|org|net)");
+  tld(list?: string[]): Base {
+    const body =
+      list && list.length
+        ? list.map((t) => escapeLiteral(t)).join("|")
+        : "[a-zA-Z]{2,}";
+    return this.add(`(${body})`);
   }
 
   path(): Base {
@@ -324,7 +328,7 @@ const Patterns = (() => {
     email: createCachedPattern(() =>
       createRegex()
         .startAnchor()
-        .word()
+        .anyOf("\\w.+-")
         .oneOrMore()
         .literal("@")
         .word()
@@ -345,11 +349,20 @@ const Patterns = (() => {
         .startAnchor()
         .protocol()
         .www()
-        .word()
+        .startGroup()
+        .anyOf("\\w-")
         .oneOrMore()
         .literal(".")
+        .endGroup()
+        .oneOrMore()
         .tld()
         .path()
+        .startGroup()
+        .literal("?")
+        .nonWhitespace()
+        .zeroOrMore()
+        .endGroup()
+        .optional()
         .endAnchor()
     ),
     phoneInternational: createCachedPattern(() =>
@@ -358,7 +371,8 @@ const Patterns = (() => {
         .literal("+")
         .digit()
         .between(1, 3)
-        .literal("-")
+        .anyOf("-\\s")
+        .optional()
         .digit()
         .between(3, 14)
         .endAnchor()
